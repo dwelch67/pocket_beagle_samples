@@ -1,0 +1,17 @@
+
+See top level README for more information on documentation for this
+chip and board.  And for instructions on how to load and run this
+example.
+
+This took a bit.  Needed a wake up instead of a clock enable.
+GPIO1.11 comes out of reset as a GPIO, we need to change it to be
+mode 0 which is UART0_TXD.  GPIO1.10 is UART0_RXD in mode0 as well
+will get to that soon.
+
+Standard 16550 register set.
+
+There is a times 2 somewhere, 24Mhz/16/115200 is 13 but we need a
+divisor of 26.  Something to figure out.
+
+This spits out 012345670123456... as fast as it can, forever.
+
