@@ -1,0 +1,11 @@
+
+See top level README for more information on documentation for this
+chip and board.  And for instructions on how to load and run this
+example.
+
+This is the first example meant to get some sign of life.  You
+have to enable or at least see if the peripheral in question should
+be enabled out of reset.  GPIO1 is not so you have to enable clocks to
+it then you can use it.  This code just burns time between led state
+changes by counting to some number.  It is not meant to be a precise
+time in any way, just enough time so you can see it blink.

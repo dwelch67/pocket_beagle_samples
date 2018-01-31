@@ -1,0 +1,7 @@
+
+See top level README for more information on documentation for this
+chip and board.  And for instructions on how to load and run this
+example.
+
+This example uses DMTIMER2 with the external oscillator which is
+24MHz.  0x20000000 is about 1.4 seconds between led state changes.

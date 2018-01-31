@@ -1,4 +1,46 @@
 
+Baremetal examples for the PocketBeagle board
+
+https://beagleboard.org/pocket
+
+This board is based on the system in package
+
+Octavo systems OSD3358-SM
+
+Which includes in the package a texas instruments AM3358
+
+http://www.ti.com/processors/sitara/arm-cortex-a8/am335x/overview.html
+
+then look at the AM3358 then technical documents, under User guides
+there is the Technical Reference Manual which is currently directly
+linked here
+
+http://www.ti.com/lit/ug/spruh73p/spruh73p.pdf
+
+Note that all of these links are subject to change at any time.
+
+Following the beagleboard path this page looks pretty good
+
+https://github.com/beagleboard/pocketbeagle/wiki/System-Reference-Manual
+
+We can see the LEDs are connected directly to GPIO pins.
+
+LED Signal Name Proc Ball   SiP Ball
+USR0    GPIO1_21    V15 P13
+USR1    GPIO1_22    U15 T14
+USR2    GPIO1_23    T15 R14
+USR3    GPIO1_24    V16 P14
+
+That github repo also has a schematic.
+
+From the schematic the SYSBOOT pins are
+
+0100000000011000
+
+24MHz CLKOUT1 disabled boot sequence SPI0 MMC0 USB0 UART0
+
+-------------------------------
+
 The Initialization chapter has a section on Memory Booting and
 MMC/SD cards and a section on Image Format (for the data on the
 sd card).
@@ -42,5 +84,86 @@ pad this out to 0x200 bytes
 0x208: software starts
 
 Internal SRAM 0x402F0400 to 0x402FFFFF  64K - 0x400
+
+I run Linux which can make this next part super easy, but also super
+dangerous.  You need to mount the sd card in your development computer
+
+sudo fdisk -l
+
+to list the drives, remove the sd card run this, put it back on
+run it again, you should see a new one show up like this one
+
+Disk /dev/sdf: 1.9 GiB, 1967128576 bytes, 3842048 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+So /dev/sdf is the thing we care about, we are going to take over/trash
+the sd card so dont use one you have other stuff on.  You can
+repartition and format the drive again for use, but save anything there
+you care about before doing this.  I wont put a line you can cut
+and paste you need to figure out the device, if you hit the wrong one
+say you hit your hard drive, you may lose/trash your hard drive so
+you need to be VERY careful...You have been warned
+
+replace the X with what you find.
+
+sudo dd if=sdraw.bin of=/dev/sdX
+1+1 records in
+1+1 records out
+776 bytes copied, 0.00248622 s, 312 kB/s
+
+remove the sd card, put it in the pocket beagle and power on.
+
+I have left a built sdraw.bin from blinker01 in the base directory
+for you to try.  If that file works but your build doesnt then perhaps
+it is a tools problem.  The four user leds should blink.
+
+-----------
+
+I would like to use the uart boot mode, but if the sd card is not
+present then it boots into the onboard flash even though from the
+boot order that doesnt necessarily makes sense.
+
+-----------
+
+There are other boot modes as well as a different SD card approach, but
+will mess with those later, for now RAW MMC/SD is the mode of choice
+each directory unless otherwise noted will create an sdraw.bin file
+that you dd over to the sd card or use another tool as needed to do
+low level/raw writes to the sd card.
+
+-----------
+
+See the TOOLCHAIN file for information on how to get the gnu toolchain
+which what I used to build these examples.
+
+The ti AM3358 page states this chip is based around an ARM Cortex-A8
+core.  What we do with this information is gather some additional
+important documents.
+
+http://infocenter.arm.com
+
+You might need to sacrifice an email address, you decide for yourself
+if you are an ARM developer or not.
+
+Under Cortex-A series processors on the left expand Cortex-A8 for
+now we dont know which revision this is and yes it does matter you
+certainly want the manual that goes with the revision that ti used
+for this part.  Parhaps the most recent has documentation fixes but
+be careful that the different revisions may have differences in features
+or addresses or other.
+
+I slide to the bottom of the page for the specific revision chosen
+and get the pdf.
+
+The TRM for the core (Cortex-A8) tells us this is an ARMv7-A so we
+go back to the left side of the ARM page under ARM architecture,
+Reference Manuals, ARMv7-AR (not the ARMv7-M that is not the same),
+And get the pdf version of that.
+
+
+
+
 
 

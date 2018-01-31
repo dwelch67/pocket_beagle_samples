@@ -1,0 +1,7 @@
+
+See top level README for more information on documentation for this
+chip and board.  And for instructions on how to load and run this
+example.
+
+This example uses DMTIMER0 which is connected to the internal 32k
+oscillator.  0x8000 results in one led state change per second.
