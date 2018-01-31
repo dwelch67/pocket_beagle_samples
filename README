@@ -1,8 +1,4 @@
 
-Internal SRAM 0x402F0400 to 0x402FFFFF  64K - 0x400
-
-Assuming this is a GP (General Purpose) processor (vs HS).
-
 The Initialization chapter has a section on Memory Booting and
 MMC/SD cards and a section on Image Format (for the data on the
 sd card).
@@ -23,7 +19,8 @@ the program.  There is almost 64K of internal sram at 0x402F0400.
 0x00000000
 0x00000000
 0x00000000
-0x45544843 CHSETTINGS
+0x45534843 CHSETTINGS
+0x4E495454
 0x00005347 ----
 
 0xFFFFFFFF ----
@@ -40,9 +37,10 @@ the program.  There is almost 64K of internal sram at 0x402F0400.
 
 pad this out to 0x200 bytes
 
-0x00001000 length of program
-0x402F0400 destination address
-[our program]
+0x200: 0x00001000 length of program
+0x204: 0x402F0400 destination address
+0x208: software starts
 
+Internal SRAM 0x402F0400 to 0x402FFFFF  64K - 0x400
 
 
