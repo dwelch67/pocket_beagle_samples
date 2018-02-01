@@ -1,0 +1,14 @@
+
+See top level README for more information on documentation for this
+chip and board.  And for instructions on how to load and run this
+example.
+
+UART0_RXD is on GPIO1.10.
+UART0_TXD is on GPIO1.11.
+
+Standard 16550 register set.
+
+115200 8N1
+
+This spits out a counter then whatever you type is printed out, the
+ascii/hex value.

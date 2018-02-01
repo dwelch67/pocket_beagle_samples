@@ -1,6 +1,6 @@
 
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
@@ -28,10 +28,60 @@ extern void ASMDELAY ( unsigned int );
 #define CONF_UART0_RXD (CONF_BASE+0x970)
 #define CONF_UART0_TXD (CONF_BASE+0x974)
 
-int notmain ( void )
+static unsigned int uart_recv ( void )
 {
-    unsigned int rx;
+    while(1)
+    {
+        if(GET32(UART0_LSR)&0x01) break;
+    }
+    return(GET32(UART0_RHR)&0xFF);
+}
 
+
+void uart_send ( unsigned int c )
+{
+    while(1)
+    {
+        if(GET32(UART0_LSR)&0x20) break;
+    }
+    PUT32(UART0_THR,c);
+}
+
+void uart_flush ( void )
+{
+    while(1)
+    {
+        if(GET32(UART0_LSR)&0x40) break;
+    }
+}
+
+void hexstrings ( unsigned int d )
+{
+    //unsigned int ra;
+    unsigned int rb;
+    unsigned int rc;
+
+    rb=32;
+    while(1)
+    {
+        rb-=4;
+        rc=(d>>rb)&0xF;
+        if(rc>9) rc+=0x37; else rc+=0x30;
+        uart_send(rc);
+        if(rb==0) break;
+    }
+    uart_send(0x20);
+}
+
+void hexstring ( unsigned int d )
+{
+    hexstrings(d);
+    uart_send(0x0D);
+    uart_send(0x0A);
+}
+
+void uart_init ( void )
+{
     PUT32(CM_WKUP_UART0_CLKCTRL,2);
     PUT32(CONF_UART0_RXD,0x20);
     PUT32(CONF_UART0_TXD,0x00);
@@ -57,18 +107,22 @@ int notmain ( void )
     PUT32(UART0_MCR,0x00);
 
     PUT32(UART0_MDR1,0x00);
+}
 
-    for(rx=0x30;;rx++)
+int notmain ( void )
+{
+    unsigned int rx;
+
+    uart_init();
+
+    hexstring(0x12345678);
+    for(rx=0;rx<100;rx++) hexstring(rx);
+    while(1)
     {
-        rx&=0x37;
-        while(1)
-        {
-            if(GET32(UART0_LSR)&0x20) break;
-        }
-        PUT32(UART0_THR,rx);
+        rx=uart_recv();
+        hexstring(rx);
     }
-
     return(0);
 }
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
