@@ -9,7 +9,7 @@ unsigned char myprog[PROGMAX+0x1000];
 int main ( void )
 {
     unsigned int rb;
-    
+
     FILE *fp;
 
     fp=fopen("notmain.bin","rb");
@@ -34,7 +34,7 @@ int main ( void )
     data[ 3]=0x00000000; //
     data[ 4]=0x00000000; //
     data[ 5]=0x45534843; // CHSETTINGS
-    data[ 6]=0x4E495454; // 
+    data[ 6]=0x4E495454; //
     data[ 7]=0x00005347; // ----
 
     data[ 8]=0xFFFFFFFF;// ----
@@ -52,7 +52,7 @@ int main ( void )
     rb+=  0xFF;
     rb&=(~0xFF);
     data[128]=rb;//0x00001000;// length of program
-    data[129]=0x402F0400; // destination address
+    data[129]=0x402F1000; // destination address
     fp=fopen("sdraw.bin","wb");
     if(fp==NULL)
     {

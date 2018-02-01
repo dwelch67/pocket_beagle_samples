@@ -162,6 +162,85 @@ go back to the left side of the ARM page under ARM architecture,
 Reference Manuals, ARMv7-AR (not the ARMv7-M that is not the same),
 And get the pdf version of that.
 
+------------
+
+Start with the blinker examples.  Typically I/you want to start by
+blinking an led which is the printf("Hello World\n"); of bare metal.
+Working into using timers and verifying or discovering what the clock
+frequency is.  From there you get a uart up, this can be tricky,
+often is, and in the end it shouldnt have been that hard.  Fortunately
+I did all this for you with some uart examples.  You could just skip
+over that to the bootloader01 example.  This saves on the sd card
+dance
+
+1) unplug the board
+2) remove the sd card
+3) put the sd card in a reader in the development machine
+4) write your new program to the sd card
+5) sync (dont need to with this raw method)
+6) unmount (dont need to with this raw method)
+7) remove sd card from development computer
+8) place sd card in board
+9) power board
+
+And you repeat that hundreds of times.
+
+Or you can one time load the bootloader onto the flash, I have left
+an already built binary for you bootloader.bin in this directory.
+Write that as you would an sdraw.bin.  You will need a usb to 3.3Vttl
+solution, google raspberry pi uart cable or get an ftdi breakout for
+like $2 on ebay and some jumper cables for a few bucks.  Connect the
+host uart TX to the boards UART 0 RX and the host uart RX to the boards
+UART 0 TX.
+
+I use minicom on linux you can use what you like, will leave it an
+exercise to the reader on getting the uart up on the host, set to
+115200 8N1 no flow control, etc...
+
+When you have it all connected and power on the board you will see
+
+12345678
+
+SREC
+
+On the console.  Open the notmain.srec file in this directory,
+cut and paste the contents of this file into your uart terminal.
+
+If happy the terminal will show
+
+402F1000
+
+after a few seconds. If no errors (0xBADBADxx) hit the g (as in go) key
+in the console to tell the bootloader to start the program, it will
+print the entry address (again) then run.  The notmain.srec in this
+top level directory is blinker01 so it will blink the leds.
+
+Each of the examples generates a notmain.srec file as well as sdraw.bin
+so once you get the bootloader up and running you ideally no longer
+need to remove the sd card during development.
+
+The reset button on the pocket beagle works.  You have to press it for
+10 seconds, plus, then release then press it for less than a second
+and it resets/boots.  Hopefully someday I will maybe find what that
+is connected to and reprogram it for a shorter period.  You can easily
+just unplug and replug the board power (usb cable) in far less time
+but puts wear and tear on the usb connector.  Goal is to avoid such
+things, ideally just push a button to re-boot into the bootloader.
+
+-------------
+
+note, I got lucky, the mkraw.c and memmap in each directory need
+to have matching start addresses.  The one in bootloader01 is different
+from the other examples the bootloader needs to run out of the way
+so that you can load examples in their normal place, so it runs near
+the top of the SRAM leaving room for other programs lower in the
+SRAM.  There is an additional hardcoded value in the bootloader that
+matches with its unique memmap and mkraw.c that keeps you from
+overwriting the bootloader while loading your program.
+
+
+
+
 
 
 

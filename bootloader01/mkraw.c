@@ -52,7 +52,7 @@ int main ( void )
     rb+=  0xFF;
     rb&=(~0xFF);
     data[128]=rb;//0x00001000;// length of program
-    data[129]=0x402F1000; // destination address
+    data[129]=0x402FF000; // destination address
     fp=fopen("sdraw.bin","wb");
     if(fp==NULL)
     {
