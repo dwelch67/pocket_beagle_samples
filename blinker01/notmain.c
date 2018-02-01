@@ -15,10 +15,9 @@ extern void dummy ( unsigned int );
 int notmain ( void )
 {
     unsigned int ra;
-    
+
     PUT32(CM_PER_GPIO1_CLKCTRL,2);
     PUT32(GPIO1_OE,0xFE1FFFFF);
-    for(ra=0;ra<100;ra++) dummy(ra);
     while(1)
     {
         PUT32(GPIO1_DATAOUT,0x01E00000);
