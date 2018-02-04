@@ -33,6 +33,10 @@ int notmain ( void )
     unsigned int rx;
 
     PUT32(CM_WKUP_UART0_CLKCTRL,2);
+    while(1)
+    {
+        if((GET32(CM_WKUP_UART0_CLKCTRL)&0x00030000)==0) break;
+    }
     PUT32(CONF_UART0_RXD,0x20);
     PUT32(CONF_UART0_TXD,0x00);
 

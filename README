@@ -238,6 +238,19 @@ SRAM.  There is an additional hardcoded value in the bootloader that
 matches with its unique memmap and mkraw.c that keeps you from
 overwriting the bootloader while loading your program.
 
+------------
+
+main id register for the arm core is
+
+0x413FC082
+
+It so rev 3.2 of the cortex-a8.
+
+------------
+
+bootloader02 is the same as bootloader01 but the L1 instruction cache
+is on.  Seems to be just enough to allow ascii downloads of srec
+files in minicom.  bootloader.bin is now bootloader02 based.
 
 
 

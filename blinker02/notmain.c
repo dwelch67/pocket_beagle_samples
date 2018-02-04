@@ -16,6 +16,10 @@ extern void ASMDELAY ( unsigned int );
 
 #define DMTIMER0_TSICR (DMTIMER0_BASE+0x54)
 
+#define GPIO1_BASE              0x4804C000
+#define GPIO1_OE                (GPIO1_BASE+0x134)
+#define GPIO1_CLEARDATAOUT      (GPIO1_BASE+0x190)
+#define GPIO1_SETDATAOUT        (GPIO1_BASE+0x194)
 
 #define GPIO1_BASE      0x4804C000
 #define GPIO1_OE        (GPIO1_BASE+0x134)
@@ -23,22 +27,27 @@ extern void ASMDELAY ( unsigned int );
 #define CM_PER_BASE     0x44E00000
 #define CM_PER_GPIO1_CLKCTRL (CM_PER_BASE+0xAC)
 #define CM_WKUP_TIMER0_CLKCTRL (CM_PER_BASE+0x10)
+
 int notmain ( void )
 {
     unsigned int ra;
 
     PUT32(CM_PER_GPIO1_CLKCTRL,2);
+    while(1)
+    {
+        if((GET32(CM_PER_GPIO1_CLKCTRL)&0x00030000)==0) break;
+    }
     PUT32(GPIO1_OE,0xFE1FFFFF);
     PUT32(DMTIMER0_TCLR,0x00000003);
     while(1)
     {
-        PUT32(GPIO1_DATAOUT,0x01E00000);
+        PUT32(GPIO1_SETDATAOUT,0x01E00000);
         while(1)
         {
             ra=GET32(DMTIMER0_TCRR);
             if((ra&=0x8000)==0) break;
         }
-        PUT32(GPIO1_DATAOUT,0x00000000);
+        PUT32(GPIO1_CLEARDATAOUT,0x01E00000);
         while(1)
         {
             ra=GET32(DMTIMER0_TCRR);
