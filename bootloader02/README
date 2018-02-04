@@ -1,0 +1,12 @@
+
+See top level README for documentation on this platform.
+
+This is a simple s-record based bootloader (uart0)
+
+See top level README for more info on using this bootloader.
+
+same as bootloader01 except the L1 instruction cache is on.  seems
+to be just enough to allow an ascii download of an srec file in
+minicom.
+
+
